@@ -2,22 +2,12 @@ const toDoForm = document.getElementById("todo-form");
 const toDoInput = toDoForm.querySelector("input");
 const toDoList = document.getElementById("todo-list");
 
-const toDos = [];
+const TODOLIST_KEY = "todoList";
+
+let toDos = [];
 
 function saveToDos() {
-  localStorage.setItem("list", JSON.stringify(toDos));
-}
-
-function paintToDo(newToDo) {
-  const li = document.createElement("li");
-  const span = document.createElement("span");
-  span.innerText = newToDo;
-  const button = document.createElement("button");
-  button.innerText = "Delete";
-  button.addEventListener("click", deleteToDo);
-  li.appendChild(span);
-  li.appendChild(button);
-  toDoList.appendChild(li);
+  localStorage.setItem(`${TODOLIST_KEY}`, JSON.stringify(toDos));
 }
 
 function deleteToDo(event) {
@@ -25,8 +15,23 @@ function deleteToDo(event) {
   //console.log(event);
   //console.dir(event.target);
   const li = event.target.parentElement;
-  //const li = event.path[1]; 위에 줄이랑 같은기능.. 왜 위에껄로 썻을지? 댓글확인!
+  //const li = event.path[1]; 위에 줄이랑 같은기능.. 왜 위에껄로 썻을지? -> by. nico 나중에 코드를 볼때 parentElement를 사용하는게 더 직관적으로 보기 쉽기 때문.
+  toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id)); //li.id를 console.log 찍어보면 string으로 나오고 toDo.id는 int이기 때문에 둘은 무조건 달라서 true가 나오게 된다. 따라서 string을 int로 바꿔야 한다.
+  saveToDos();
   li.remove();
+}
+
+function paintToDo(newToDo) {
+  const li = document.createElement("li");
+  li.id = newToDo.id;
+  const span = document.createElement("span");
+  span.innerText = newToDo.text;
+  const button = document.createElement("button");
+  button.innerText = "Delete";
+  li.appendChild(span);
+  li.appendChild(button);
+  button.addEventListener("click", deleteToDo);
+  toDoList.appendChild(li);
 }
 
 function handleToDoSubmit(event) {
@@ -35,9 +40,21 @@ function handleToDoSubmit(event) {
   toDoInput.value = "";
   //toDoInput의 value를 바꿔도 newToDo라는 변수에 이미 값을 복사해 놨기 때문에 newToDo의 값은 변하지 않는다.
   //const newToDo=toDoInput.value 와 toDoInput.value="";의 위아래를 바꾸면 newToDo의 값에는 아무것도 들어가지 않는다.
-  toDos.push(newToDo);
-  paintToDo(newToDo);
+  const newToDoObj = {
+    text: newToDo,
+    id: Date.now(),
+  };
+  toDos.push(newToDoObj);
+  paintToDo(newToDoObj);
   saveToDos();
 }
 
 toDoForm.addEventListener("submit", handleToDoSubmit);
+
+const savedToDos = localStorage.getItem(TODOLIST_KEY);
+
+if (savedToDos !== null) {
+  const parsedToDos = JSON.parse(savedToDos);
+  toDos = parsedToDos;
+  parsedToDos.forEach(paintToDo);
+}
