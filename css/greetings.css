@@ -1,0 +1,36 @@
+.hidden {
+  display: none;
+}
+
+#login-form,
+#greeting {
+  margin-top: 200px;
+}
+
+#login-form input {
+  border: none;
+  background: transparent;
+  font-size: 25px;
+  color: white;
+}
+
+#login-form input:first-child {
+  border-bottom: white 2px solid;
+  text-align: center;
+}
+
+#login-form input::placeholder {
+  color: white;
+}
+
+#login-form input:last-child {
+  background-color: var(--grey);
+  border-radius: 20px;
+  padding: 5px 15px;
+}
+
+#greeting {
+  color: white;
+  font-size: 50px;
+  font-weight: 600;
+}
