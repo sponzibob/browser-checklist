@@ -1,15 +1,12 @@
 const toDoForm = document.getElementById("todo-form");
 const toDoInput = toDoForm.querySelector("input");
 const toDoList = document.getElementById("todo-list");
-
 const TODOLIST_KEY = "todoList";
-
 let toDos = [];
 
 function saveToDos() {
   localStorage.setItem(`${TODOLIST_KEY}`, JSON.stringify(toDos));
 }
-
 function deleteToDo(event) {
   //addEventListenr를 사용할 때 event인자를 넣게 되면 event인자에 많은 정보가 담겨있다. 이 function은 click을 받아왔기 때문에 click된 위치 정보도 받아올 수 있다.
   //console.log(event);
@@ -24,11 +21,15 @@ function deleteToDo(event) {
 function paintToDo(newToDo) {
   const li = document.createElement("li");
   li.id = newToDo.id;
-  const span = document.createElement("span");
-  span.innerText = newToDo.text;
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.classList.add("checkbox");
+  const label = document.createElement("label");
+  label.innerText = newToDo.text;
   const button = document.createElement("button");
-  button.innerText = "Delete";
-  li.appendChild(span);
+  button.innerText = "ⓧ";
+  li.appendChild(input);
+  li.appendChild(label);
   li.appendChild(button);
   button.addEventListener("click", deleteToDo);
   toDoList.appendChild(li);
@@ -58,3 +59,21 @@ if (savedToDos !== null) {
   toDos = parsedToDos;
   parsedToDos.forEach(paintToDo);
 }
+
+const listCheckBox = document.querySelectorAll(".checkbox");
+
+function listLineThrough(event) {
+  const listLabel = event.target.nextElementSibling;
+  const checkStatus = event.target.checked;
+  if (checkStatus) {
+    listLabel.style.textDecoration = "line-through";
+    listLabel.style.color = "grey";
+  } else {
+    listLabel.style.textDecoration = "none";
+    listLabel.style.color = "white";
+  }
+}
+
+listCheckBox.forEach((check) =>
+  check.addEventListener("click", listLineThrough)
+);

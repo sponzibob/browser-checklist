@@ -1,0 +1,37 @@
+#todo-form input {
+  border: white 1px solid;
+  border-radius: 5px;
+  width: 200px;
+  padding: 5px;
+  text-align: center;
+  background: transparent;
+  color: white;
+}
+
+#todo-form input:focus {
+  outline: none;
+}
+
+#todo-form input:focus::placeholder {
+  color: transparent;
+}
+
+#todo-form input::placeholder {
+  color: white;
+}
+
+#todo-list li {
+  list-style: none;
+}
+
+#todo-list li > label {
+  color: white;
+  margin: 5px;
+}
+
+#todo-list li > button {
+  border: none;
+  background-color: transparent;
+  color: white;
+  text-align: center;
+}

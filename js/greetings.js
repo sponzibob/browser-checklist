@@ -52,4 +52,10 @@ if (savedUsername === null) {
   paintGreeting(savedUsername);
 }
 
+function reloadBrowser() {
+  if (savedUsername === null) {
+    location.reload(true);
+  }
+}
+setInterval(reloadBrowser, 60000);
 setInterval(paintGreeting, 60000);
