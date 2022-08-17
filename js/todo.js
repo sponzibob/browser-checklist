@@ -12,12 +12,28 @@ function deleteToDo(event) {
   //console.log(event);
   //console.dir(event.target);
   const li = event.target.parentElement;
+  const listLabelTx = event.target.previousElementSibling.innerText;
   //const li = event.path[1]; 위에 줄이랑 같은기능.. 왜 위에껄로 썻을지? -> by. nico 나중에 코드를 볼때 parentElement를 사용하는게 더 직관적으로 보기 쉽기 때문.
   toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id)); //li.id를 console.log 찍어보면 string으로 나오고 toDo.id는 int이기 때문에 둘은 무조건 달라서 true가 나오게 된다. 따라서 string을 int로 바꿔야 한다.
   saveToDos();
   li.remove();
+  localStorage.removeItem(listLabelTx);
 }
 
+function listLineThrough(event) {
+  const listLabel = event.target.nextElementSibling;
+  const listLabelTx = event.target.nextElementSibling.innerText;
+  const checkStatus = event.target.checked;
+  if (checkStatus) {
+    listLabel.style.textDecoration = "line-through";
+    listLabel.style.color = "grey";
+    localStorage.setItem(listLabelTx, 1);
+  } else {
+    listLabel.style.textDecoration = "none";
+    listLabel.style.color = "white";
+    localStorage.removeItem(listLabelTx);
+  }
+}
 function paintToDo(newToDo) {
   const li = document.createElement("li");
   li.id = newToDo.id;
@@ -33,6 +49,10 @@ function paintToDo(newToDo) {
   li.appendChild(button);
   button.addEventListener("click", deleteToDo);
   toDoList.appendChild(li);
+  const listCheckBox = document.querySelectorAll(".checkbox");
+  listCheckBox.forEach((check) =>
+    check.addEventListener("click", listLineThrough)
+  );
 }
 
 function handleToDoSubmit(event) {
@@ -60,20 +80,14 @@ if (savedToDos !== null) {
   parsedToDos.forEach(paintToDo);
 }
 
-const listCheckBox = document.querySelectorAll(".checkbox");
-
-function listLineThrough(event) {
-  const listLabel = event.target.nextElementSibling;
-  const checkStatus = event.target.checked;
-  if (checkStatus) {
-    listLabel.style.textDecoration = "line-through";
-    listLabel.style.color = "grey";
-  } else {
-    listLabel.style.textDecoration = "none";
-    listLabel.style.color = "white";
+const checkBox = document.querySelectorAll("label");
+for (i = 0; i < checkBox.length; i++) {
+  const checkBoxTx = checkBox[i].innerText;
+  const checkBoxNum = checkBox[i];
+  const savedChecked = localStorage.getItem(checkBoxTx);
+  if (savedChecked == 1) {
+    checkBoxNum.previousElementSibling.checked = "true";
+    checkBoxNum.style.textDecoration = "line-through";
+    checkBoxNum.style.color = "grey";
   }
 }
-
-listCheckBox.forEach((check) =>
-  check.addEventListener("click", listLineThrough)
-);
