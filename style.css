@@ -3,6 +3,7 @@
 @import "css/greetings.css";
 @import "css/background.css";
 @import "css/todo.css";
+@import "css/info.css";
 
 body {
   overflow: hidden;

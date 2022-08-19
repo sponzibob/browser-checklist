@@ -1,0 +1,17 @@
+#clock,
+#weather {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+}
+
+#clock {
+  right: 115px;
+}
+
+#info {
+  display: flex;
+}

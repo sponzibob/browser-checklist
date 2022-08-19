@@ -7,10 +7,8 @@ function onGeoOk(position) {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      const city = document.querySelector("#weather span:last-child");
       const weather = document.querySelector("#weather span:first-child");
-      city.innerText = data.name;
-      weather.innerText = `${data.weather[0].main}, ${data.main.temp}`;
+      weather.innerText = `${data.weather[0].main}, ${data.main.temp}℃`;
     });
 }
 
@@ -20,4 +18,8 @@ function onGeoError() {
 
 //navigator 함수를 사용하면 사용자의 GPS or WIFI를 통해 위치를 알수 있다.
 //getCurrentPosition에는 2개의 함수가 들어가야 하는데, 1번째는 위치를 잘 불러왔을때 사용하는 함수이고, 2번째는 위치를 불러오기 실패했을 때 사용하는 함수이다.
-navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+
+setInterval(
+  navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError),
+  60000
+);
