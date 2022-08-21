@@ -21,35 +21,56 @@ function deleteToDo(event) {
 }
 
 function listLineThrough(event) {
-  const listLabel = event.target.nextElementSibling;
-  const listLabelTx = event.target.nextElementSibling.innerText;
-  const checkStatus = event.target.checked;
-  if (checkStatus) {
-    listLabel.style.textDecoration = "line-through";
-    listLabel.style.color = "grey";
-    localStorage.setItem(listLabelTx, 1);
+  console.dir(event);
+  if (event.path[0] === "input") {
+    const listSpan = event.target;
+    const checkStatus = event.target.previousElementSibling.checked;
+    if (checkStatus) {
+      ifChecked(listSpan);
+    } else {
+      ifUnchecked(listSpan);
+    }
   } else {
-    listLabel.style.textDecoration = "none";
-    listLabel.style.color = "white";
-    localStorage.removeItem(listLabelTx);
+    const listSpan = event.target.nextElementSibling;
+    const checkStatus = event.target.checked;
+    if (checkStatus) {
+      ifChecked(listSpan);
+    } else {
+      ifUnchecked(listSpan);
+    }
   }
 }
+function ifChecked(span) {
+  const spanTx = span.innerText;
+  span.style.textDecoration = "line-through";
+  span.style.color = "grey";
+  localStorage.setItem(spanTx, 1);
+}
+function ifUnchecked(span) {
+  const spanTx = span.innerText;
+  span.style.textDecoration = "none";
+  span.style.color = "white";
+  localStorage.removeItem(spanTx);
+}
+
 function paintToDo(newToDo) {
   const li = document.createElement("li");
   li.id = newToDo.id;
+  const label = document.createElement("label");
+  label.classList.add("checkBox");
   const input = document.createElement("input");
   input.type = "checkbox";
-  input.classList.add("checkbox");
-  const label = document.createElement("label");
-  label.innerText = newToDo.text;
+  const span = document.createElement("span");
+  span.innerText = newToDo.text;
   const button = document.createElement("button");
   button.innerText = "ⓧ";
-  li.appendChild(input);
+  label.appendChild(input);
+  label.appendChild(span);
   li.appendChild(label);
   li.appendChild(button);
   button.addEventListener("click", deleteToDo);
   toDoList.appendChild(li);
-  const listCheckBox = document.querySelectorAll(".checkbox");
+  const listCheckBox = document.querySelectorAll(".checkBox");
   listCheckBox.forEach((check) =>
     check.addEventListener("click", listLineThrough)
   );
@@ -80,14 +101,14 @@ if (savedToDos !== null) {
   parsedToDos.forEach(paintToDo);
 }
 
-const checkBox = document.querySelectorAll("label");
+const checkBox = document.querySelectorAll(".checkBox");
 for (i = 0; i < checkBox.length; i++) {
-  const checkBoxTx = checkBox[i].innerText;
-  const checkBoxNum = checkBox[i];
+  const checkBoxSpan = checkBox[i].children[1];
+  const checkBoxTx = checkBoxSpan.innerText;
+  const checkBoxCheck = checkBox[i].children[0];
   const savedChecked = localStorage.getItem(checkBoxTx);
   if (savedChecked == 1) {
-    checkBoxNum.previousElementSibling.checked = "true";
-    checkBoxNum.style.textDecoration = "line-through";
-    checkBoxNum.style.color = "grey";
+    checkBoxCheck.checked = "true";
+    ifChecked(checkBoxSpan);
   }
 }
