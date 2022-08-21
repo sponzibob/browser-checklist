@@ -4,6 +4,7 @@
 @import "css/background.css";
 @import "css/todo.css";
 @import "css/info.css";
+@import "css/quotes.css";
 
 body {
   overflow: hidden;
