@@ -35,3 +35,14 @@
   color: white;
   text-align: center;
 }
+
+.checkBoxStyle {
+  display: inline-block;
+  margin-right: 5px;
+  position: relative;
+  height: 13px;
+  width: 13px;
+  border: solid 1px black;
+  opacity: 0.8;
+  background-color: #eeeeee;
+}
