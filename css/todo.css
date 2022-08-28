@@ -36,6 +36,10 @@
   text-align: center;
 }
 
+.checkBox input {
+  display: none;
+}
+
 .checkBoxStyle {
   display: inline-block;
   margin-right: 5px;
@@ -45,4 +49,52 @@
   border: solid 1px black;
   opacity: 0.8;
   background-color: #eeeeee;
+}
+
+.checkBox:hover .checkBoxStyle {
+  background-color: #cccccc;
+}
+
+.check {
+  border-color: red;
+}
+
+.checkBoxStyle::before,
+.checkBoxStyle::after {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 0;
+  background-color: red;
+  position: absolute;
+  transform-origin: left top;
+}
+
+.checkBoxStyle::before {
+  top: 6px;
+  left: 1px;
+  border-radius: 2px;
+  transform: rotate(-45deg);
+}
+
+.checkBoxStyle::after {
+  top: 13px;
+  left: 8px;
+  border-radius: 2px;
+  transform: rotate(-135deg);
+}
+
+.checkBox input:checked + .checkBoxStyle {
+  background-color: #86dc74;
+  border-color: red;
+}
+
+.checkBox input:checked + .checkBoxStyle::before {
+  height: 10px;
+  transition: all 0.15s ease;
+}
+
+.checkBox input:checked + .checkBoxStyle::after {
+  height: 20px;
+  transition: all 0.15s ease 0.15s;
 }

@@ -22,30 +22,12 @@ function deleteToDo(event) {
 
 function listLineThrough(event) {
   console.dir(event);
-  if (event.target.tagName === "INPUT") {
-    const listSpan = event.target.nextElementSibling;
-    const checkStatus = event.target.checked;
-    if (checkStatus) {
-      ifChecked(listSpan);
-    } else {
-      ifUnchecked(listSpan);
-    }
-  } else if (event.target.tagName === "SPAN") {
-    const listSpan = event.target;
-    const checkStatus = event.target.previousElementSibling.checked;
-    if (checkStatus) {
-      ifChecked(listSpan);
-    } else {
-      ifUnchecked(listSpan);
-    }
+  const listSpan = event.target.nextElementSibling.nextElementSibling;
+  const checkStatus = event.target.checked;
+  if (checkStatus) {
+    ifChecked(listSpan);
   } else {
-    const listSpan = event.target.nextElementSibling.nextElementSibling;
-    const checkStatus = event.target.nextElementSibling.checked;
-    if (checkStatus) {
-      ifChecked(listSpan);
-    } else {
-      ifUnchecked(listSpan);
-    }
+    ifUnchecked(listSpan);
   }
 }
 function ifChecked(span) {
@@ -70,21 +52,26 @@ function paintToDo(newToDo) {
   input.type = "checkbox";
   const span = document.createElement("span");
   span.innerText = newToDo.text;
-  const checkDiv = document.createElement("div");
-  checkDiv.classList.add("checkBoxStyle");
+  const checkSpan = document.createElement("span");
+  checkSpan.classList.add("checkBoxStyle");
   const button = document.createElement("button");
   button.innerText = "ⓧ";
-  label.appendChild(checkDiv);
   label.appendChild(input);
+  label.appendChild(checkSpan);
   label.appendChild(span);
   li.appendChild(label);
   li.appendChild(button);
   button.addEventListener("click", deleteToDo);
   toDoList.appendChild(li);
-  const listCheckBox = document.querySelectorAll(".checkBox");
-  listCheckBox.forEach((check) =>
-    check.addEventListener("click", listLineThrough)
-  );
+  input.addEventListener("click", listLineThrough);
+}
+
+function addCheckClass(event) {
+  if (event.target.checked) {
+    event.target.previousElementSibling.classList.add("check");
+  } else {
+    event.target.previousElementSibling.classList.remove("check");
+  }
 }
 
 function handleToDoSubmit(event) {
@@ -116,7 +103,7 @@ const checkBox = document.querySelectorAll(".checkBox");
 for (i = 0; i < checkBox.length; i++) {
   const checkBoxSpan = checkBox[i].children[2];
   const checkBoxTx = checkBoxSpan.innerText;
-  const checkBoxCheck = checkBox[i].children[1];
+  const checkBoxCheck = checkBox[i].children[0];
   const savedChecked = localStorage.getItem(checkBoxTx);
   if (savedChecked == 1) {
     checkBoxCheck.checked = "true";
